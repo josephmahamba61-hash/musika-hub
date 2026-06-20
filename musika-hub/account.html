@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Details | MUSIKA HUB</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="account">
+  <header class="header-sticky">
+    <div class="header-container">
+      <div class="header-left">
+        <a class="logo" href="index.html">
+          <span class="logo-text">MUSIKA HUB</span>
+          <span class="logo-tagline">Account overview</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <section class="buyer-hero">
+      <p class="eyebrow">Account profile</p>
+      <h1>Payment history, ratings, feedback, and business details</h1>
+      <p class="section-description">This page shows the information related to the logged-in account.</p>
+      <p class="section-description" id="dashboardLinkWrap"><a class="btn-primary" href="buyer.html" id="dashboardLink">Open buyer page</a></p>
+      <p class="section-description"><button id="logoutBtn" class="btn-text">Logout</button></p>
+    </section>
+
+    <section class="account-column-layout">
+      <article class="buyer-card account-column-card">
+        <span class="buyer-icon">👤</span>
+        <strong>Account name</strong>
+        <p id="accountName">Loading account name...</p>
+      </article>
+
+      <section class="account-column-layout">
+      <article class="buyer-card account-column-card">
+        <span class="buyer-icon">👤</span>
+        <strong>Registration number</strong>
+        <p id="registrationNumber"></p>
+      </article>
+
+
+      <article class="buyer-card account-column-card">
+        <span class="buyer-icon">🏢</span>
+        <strong>Business type</strong>
+        <p id="businessType">Loading business type...</p>
+      </article>
+
+      <article class="buyer-card account-column-card">
+        <span class="buyer-icon">�</span>
+        <strong>Email</strong>
+        <p id="accountEmail">Loading email...</p>
+      </article>
+
+      <article class="buyer-card account-column-card">
+        <span class="buyer-icon">�💳</span>
+        <strong>Payment history</strong>
+        <p>Invoice #1042 — $4,250 • 12 Jun 2026<br />Invoice #1038 — $1,890 • 05 Jun 2026</p>
+      </article>
+
+      <article class="buyer-card account-column-card">
+        <span class="buyer-icon">⭐</span>
+        <strong>Rating</strong>
+        <p>4.8/5 from 24 verified reviews</p>
+      </article>
+
+      <article class="buyer-card account-column-card">
+        <span class="buyer-icon">💬</span>
+        <strong>Feedback</strong>
+        <p>Fast delivery, responsive support, and reliable transaction history.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p class="section-description">&copy; 2026 MUSIKA HUB. Account overview page.</p>
+  </footer>
+
+  <script type="module">
+    import { getLocalProfile, signOutUser } from './auth.js';
+
+    const savedUser = getLocalProfile();
+    const accountName = document.getElementById('accountName');
+    const businessType = document.getElementById('businessType');
+    const registrationNumber = document.getElementById('registrationNumber');
+    const dashboardLink = document.getElementById('dashboardLink');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (savedUser) {
+      const role = savedUser.role || 'Buyer';
+      const dashboardPage = role === 'Supplier' ? 'supplier.html' : 'buyer.html';
+      const dashboardLabel = role === 'Supplier' ? 'Open supplier page' : 'Open buyer page';
+
+      accountName.textContent = savedUser.name || 'Unknown account';
+      businessType.textContent = role;
+      registrationNumber.textContent = savedUser.companyRegNumber || 'No registration number found';
+      document.getElementById('accountEmail').textContent = savedUser.email || 'Not available';
+
+      if (dashboardLink) {
+        dashboardLink.href = dashboardPage;
+        dashboardLink.textContent = dashboardLabel;
+      }
+    } else {
+      accountName.textContent = 'No account is currently logged in.';
+      businessType.textContent = 'Please sign in to view account details.';
+      registrationNumber.textContent = 'Please sign in to view registration details.';
+      document.getElementById('accountEmail').textContent = 'Please sign in to view your email.';
+    }
+
+    logoutBtn?.addEventListener('click', async () => {
+      await signOutUser();
+      window.location.href = 'signin.html';
+    });
+  </script>
+</body>
+</html>

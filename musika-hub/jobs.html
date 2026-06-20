@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jobs | MUSIKA HUB</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="jobs">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">MUSIKA HUB</a>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <input id="headerSearch" class="search-input" type="search" placeholder="Search products, categories or suppliers" />
+          <button class="search-btn" onclick="handleSearch()">🔍</button>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button"><span class="theme-icon">☀️</span></button>
+        <button id="authButton" class="btn-text sign-in-btn" type="button" onclick="window.location.href='signin.html'">Sign In</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <h1>Jobs & sourcing opportunities</h1>
+          <p class="section-description">Discover current procurement roles, contract sourcing projects, and career opportunities for buyers, suppliers, and operations teams.</p>
+        </div>
+      </div>
+      <div id="jobListings" class="jobs-grid"></div>
+      <div id="emptyJobs" class="empty-state">No active career or procurement roles found yet. Add more business activity to build your marketplace model.</div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <h2>Post a job</h2>
+          <p class="section-description">Suppliers can create job or procurement postings that buyers and admins can review.</p>
+        </div>
+      </div>
+      <div class="form-card">
+        <form id="jobPostForm" class="product-form">
+          <label class="form-label">
+            Job title
+            <input id="jobTitle" type="text" placeholder="Procurement specialist" required />
+          </label>
+          <label class="form-label">
+            Location
+            <input id="jobLocation" type="text" placeholder="Harare" required />
+          </label>
+          <label class="form-label">
+            Company
+            <input id="jobCompany" type="text" placeholder="Supplier company" required />
+          </label>
+          <label class="form-label">
+            Tags
+            <input id="jobTags" type="text" placeholder="Tender, Sourcing" />
+          </label>
+          <button class="btn-primary" type="submit">Post job</button>
+          <p id="jobPostMessage" class="section-description">Post a job listing to share opportunities with buyers and admins.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <h2>Recommended categories</h2>
+          <p class="section-description">Industry categories from your activity history that align with current openings.</p>
+        </div>
+      </div>
+      <div id="jobRecommendations" class="categories-grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 MUSIKA HUB. Job recommendations surface from buyer activity and category demand.</p>
+  </footer>
+
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="trends.html" class="nav-item">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">Trends</span>
+    </a>
+    <a href="categories.html" class="nav-item">
+      <span class="nav-icon">🗂️</span>
+      <span class="nav-label">Categories</span>
+    </a>
+    <a href="services.html" class="nav-item">
+      <span class="nav-icon">🛠️</span>
+      <span class="nav-label">Services</span>
+    </a>
+    <a href="procurement.html" class="nav-item">
+      <span class="nav-icon">📦</span>
+      <span class="nav-label">Procurement</span>
+    </a>
+    <a href="jobs.html" class="nav-item active">
+      <span class="nav-icon">💼</span>
+      <span class="nav-label">Jobs</span>
+    </a>
+  </nav>
+
+  <script src="script.js"></script>
+  <script type="module">
+    import { createJobListing, getJobListings, getLocalProfile } from './auth.js';
+
+    const jobListings = document.getElementById('jobListings');
+    const emptyJobs = document.getElementById('emptyJobs');
+    const jobPostForm = document.getElementById('jobPostForm');
+    const jobPostMessage = document.getElementById('jobPostMessage');
+    const user = getLocalProfile();
+
+    async function renderJobsPage() {
+      const jobs = await getJobListings();
+
+      if (!jobListings || !emptyJobs) return;
+      if (!jobs.length) {
+        jobListings.innerHTML = '';
+        emptyJobs.style.display = 'block';
+        return;
+      }
+
+      emptyJobs.style.display = 'none';
+      jobListings.innerHTML = jobs.map((job) => `
+        <article class="job-card">
+          <div>
+            <h4>${job.title}</h4>
+            <p>${job.company} • ${job.location}</p>
+          </div>
+          <div>
+            <span class="job-tag">${job.tags || 'Opportunity'}</span>
+            <p class="section-description">Status: ${job.status || 'pending'}</p>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    jobPostForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!user) {
+        jobPostMessage.textContent = 'Please sign in to post job listings.';
+        return;
+      }
+
+      const title = document.getElementById('jobTitle')?.value.trim();
+      const location = document.getElementById('jobLocation')?.value.trim();
+      const company = document.getElementById('jobCompany')?.value.trim();
+      const tags = document.getElementById('jobTags')?.value.trim();
+
+      if (!title || !location || !company) {
+        jobPostMessage.textContent = 'Please complete all required fields.';
+        return;
+      }
+
+      try {
+        await createJobListing({
+          title,
+          location,
+          company,
+          tags,
+          postedBy: user.name || user.email,
+          userId: user.uid
+        });
+
+        jobPostMessage.textContent = 'Job listing posted successfully.';
+        jobPostForm.reset();
+        await renderJobsPage();
+      } catch (error) {
+        console.error(error);
+        jobPostMessage.textContent = 'Unable to post the job. Please try again later.';
+      }
+    });
+
+    window.renderJobsPage = renderJobsPage;
+    renderJobsPage();
+  </script>
+</body>
+</html>

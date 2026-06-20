@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Musika Hub | Account Details</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet" />
+  <link href="https://cdn.boxicons.com/3.0.8/fonts/filled/boxicons-filled.min.css" rel="stylesheet" />
+  <link href="https://cdn.boxicons.com/3.0.8/fonts/brands/boxicons-brands.min.css" rel="stylesheet" />
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <section class="auth-card">
+      <p class="eyebrow">Account details</p>
+      <h1>Enter your account details</h1>
+      <p class="auth-copy">Provide your account details to set up your buyer, supplier, or admin profile and continue your sourcing journey.</p>
+
+      <ul class="auth-highlights">
+        <li>Verified supplier discovery</li>
+        <li>Faster quote requests</li>
+        <li>Procurement insights that convert</li>
+      </ul>
+
+      <form id="signupForm" class="auth-form" novalidate>
+        <label class="auth-field">
+          <span>Company name</span>
+          <input id="companyName" type="text" placeholder="Enter your company name" required />
+        </label>
+
+        <label class="auth-field">
+          <span>Email address</span>
+          <input id="signupEmail" type="email" placeholder="you@company.com" required />
+        </label>
+
+        <label class="auth-field">
+          <span>Role</span>
+          <select id="signupRole" required>
+            <option value="Buyer">Buyer</option>
+            <option value="Supplier">Supplier</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </label>
+        <label class="auth-field">
+          <span>Company registration number</span>
+          <input id="companyRegNumber" type="text" placeholder="Enter company registration number" required />
+        </label>
+
+        <label class="auth-field">
+          <span>Password</span>
+          <input id="signupPassword" type="password" placeholder="Create a secure password" required />
+        </label>
+        <label class="auth-field">
+          <span>Confirm Password</span>
+          <input id="signupConfirmPassword" type="password" placeholder="Confirm your password" required />
+        </label> 
+
+        <button type="submit" class="btn-primary auth-submit">Create account</button>
+      </form>
+
+      <p id="signupMessage" class="auth-message" aria-live="polite"></p>
+      <p class="auth-footer">Already have an account? <a href="signin.html">Sign in here</a></p>
+    </section>
+  </main>
+
+  <script type="module">
+    import { registerUser } from './auth.js';
+
+    const signupForm = document.getElementById('signupForm');
+    const signupMessage = document.getElementById('signupMessage');
+
+    signupForm?.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      signupMessage.textContent = '';
+
+      const companyName = document.getElementById('companyName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const role = document.getElementById('signupRole').value;
+      const password = document.getElementById('signupPassword').value;
+      const confirmPassword = document.getElementById('signupConfirmPassword').value;
+      const companyRegNumber = document.getElementById('companyRegNumber').value.trim();
+
+      if (!companyName || !email || !password || !confirmPassword || !companyRegNumber) {
+        signupMessage.textContent = 'Please complete every required field to continue.';
+        signupMessage.style.color = '#ffb4a2';
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        signupMessage.textContent = 'Passwords do not match. Please re-enter them.';
+        signupMessage.style.color = '#ffb4a2';
+        return;
+      }
+
+      try {
+        await registerUser({ companyName, email, password, role, companyRegNumber });
+        signupMessage.textContent = 'Account created successfully. Redirecting to sign in...';
+        signupMessage.style.color = '#8cffc1';
+        setTimeout(() => (window.location.href = 'signin.html'), 900);
+      } catch (err) {
+        signupMessage.textContent = err.message || 'Registration failed. Try again.';
+        signupMessage.style.color = '#ffb4a2';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Musika Hub | Sign in</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet" />
+  <link href="https://cdn.boxicons.com/3.0.8/fonts/filled/boxicons-filled.min.css" rel="stylesheet" />
+  <link href="https://cdn.boxicons.com/3.0.8/fonts/brands/boxicons-brands.min.css" rel="stylesheet" />
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <section class="auth-card">
+      <p class="eyebrow">B2B marketplace access</p>
+      <h1>Welcome back to Musika Hub</h1>
+      <p class="auth-copy">Sign in with the email and password you used when creating your account.</p>
+
+      <ul class="auth-highlights">
+        <li>Verified supplier discovery</li>
+        <li>Faster quote requests</li>
+        <li>Procurement insights that convert</li>
+      </ul>
+
+      <form id="signinForm" class="auth-form" novalidate>
+        <label class="auth-field">
+          <span>Email address</span>
+          <input id="signinEmail" type="email" placeholder="you@company.com" required />
+        </label>
+
+        <label class="auth-field">
+          <span>Password</span>
+          <input id="signinPassword" type="password" placeholder="Enter your password" required />
+        </label>
+
+        <button type="submit" class="btn-primary auth-submit">Sign in</button>
+      </form>
+
+      <p id="signinMessage" class="auth-message" aria-live="polite"></p>
+      <p class="auth-footer">Don’t have an account? <a href="signup.html">Create one here</a></p>
+    </section>
+  </main>
+
+  <script type="module">
+    import { signInUser } from './auth.js';
+
+    const signinForm = document.getElementById('signinForm');
+    const signinMessage = document.getElementById('signinMessage');
+
+    signinForm?.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      signinMessage.textContent = '';
+
+      const email = document.getElementById('signinEmail')?.value.trim().toLowerCase() || '';
+      const password = document.getElementById('signinPassword')?.value || '';
+
+      if (!email || !password) {
+        signinMessage.textContent = 'Please enter your email and password to continue.';
+        signinMessage.style.color = '#ffb4a2';
+        return;
+      }
+
+      try {
+        const profile = await signInUser(email, password);
+        const role = profile.role || 'Buyer';
+        const destination = role === 'Buyer' ? 'buyer.html' : role === 'Supplier' ? 'supplier.html' : 'admin.html';
+
+        signinMessage.textContent = `Welcome back, ${profile.name || profile.email}. Redirecting...`;
+        signinMessage.style.color = '#8cffc1';
+        setTimeout(() => (window.location.href = destination), 900);
+      } catch (err) {
+        signinMessage.textContent = err.message || 'Sign in failed. Check your credentials.';
+        signinMessage.style.color = '#ffb4a2';
+      }
+    });
+  </script>
+</body>
+</html>

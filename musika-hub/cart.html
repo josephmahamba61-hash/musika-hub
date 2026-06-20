@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cart | MUSIKA HUB</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="cart">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">MUSIKA HUB</a>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <input id="headerSearch" class="search-input" type="search" placeholder="Search products, categories or suppliers" />
+          <button class="search-btn" onclick="handleSearch()">🔍</button>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button"><span class="theme-icon">☀️</span></button>
+        <button id="authButton" class="btn-text sign-in-btn" type="button" onclick="window.location.href='signin.html'">Sign In</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <h1>Your Cart</h1>
+          <p class="section-description">Review items before requesting quotes or proceeding with procurement.</p>
+        </div>
+      </div>
+      <div id="cartItems" class="products-grid"></div>
+      <div id="emptyCart" class="empty-state">Your cart is empty. Add products from the home page to begin.</div>
+      <div id="cartSummary" class="cart-summary"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 MUSIKA HUB. Cart saved in session storage for your current visit.</p>
+  </footer>
+
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="trends.html" class="nav-item">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">Trends</span>
+    </a>
+    <a href="categories.html" class="nav-item">
+      <span class="nav-icon">🗂️</span>
+      <span class="nav-label">Categories</span>
+    </a>
+    <a href="services.html" class="nav-item">
+      <span class="nav-icon">🛠️</span>
+      <span class="nav-label">Services</span>
+    </a>
+    <a href="procurement.html" class="nav-item">
+      <span class="nav-icon">📦</span>
+      <span class="nav-label">Procurement</span>
+    </a>
+    <a href="jobs.html" class="nav-item">
+      <span class="nav-icon">💼</span>
+      <span class="nav-label">Jobs</span>
+    </a>
+  </nav>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', renderCartPage);
+  </script>
+</body>
+</html>

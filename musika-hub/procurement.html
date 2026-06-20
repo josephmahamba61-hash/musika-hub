@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Procurement | MUSIKA HUB</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="procurement">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">MUSIKA HUB</a>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <input id="headerSearch" class="search-input" type="search" placeholder="Search products, categories or suppliers" />
+          <button class="search-btn" onclick="handleSearch()">🔍</button>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button"><span class="theme-icon">☀️</span></button>
+        <button id="authButton" class="btn-text sign-in-btn" type="button" onclick="window.location.href='signin.html'">Sign In</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <h1>Procurement Requests</h1>
+          <p class="section-description">Create a procurement brief and connect with verified suppliers based on your latest product demand.</p>
+        </div>
+      </div>
+      <div class="form-card">
+        <form id="procurementForm" class="product-form">
+          <label class="form-label">
+            Procurement title
+            <input id="procurementTitle" type="text" placeholder="Bulk electrical cable supply" required />
+          </label>
+          <label class="form-label">
+            Description
+            <textarea id="procurementDescription" rows="5" placeholder="Describe the quantity, delivery location, and timelines." required></textarea>
+          </label>
+          <label class="form-label">
+            Preferred category
+            <select id="procurementCategory" required>
+              <option value="Machinery">Machinery</option>
+              <option value="Electricals">Electricals</option>
+              <option value="Construction">Construction</option>
+              <option value="Tools & Hardware">Tools & Hardware</option>
+              <option value="Safety & PPE">Safety & PPE</option>
+              <option value="Lubricants">Lubricants</option>
+              <option value="Materials">Materials</option>
+            </select>
+          </label>
+          <button class="btn-primary" type="submit">Submit Procurement Request</button>
+          <p id="procurementStatus" class="section-description">Submit a procurement request and share it with verified suppliers.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <h2>Trending Procurement Categories</h2>
+          <p class="section-description">Categories most active in your local history are shown here for faster sourcing.</p>
+        </div>
+      </div>
+      <div id="procurementCategories" class="categories-grid"></div>
+      <div id="emptyProcurement" class="empty-state">No procurement signals yet. Add products or search to start building the recommendation model.</div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 MUSIKA HUB. Procurement insights are built from your activity history.</p>
+  </footer>
+
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="trends.html" class="nav-item">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">Trends</span>
+    </a>
+    <a href="categories.html" class="nav-item">
+      <span class="nav-icon">🗂️</span>
+      <span class="nav-label">Categories</span>
+    </a>
+    <a href="services.html" class="nav-item">
+      <span class="nav-icon">🛠️</span>
+      <span class="nav-label">Services</span>
+    </a>
+    <a href="procurement.html" class="nav-item">
+      <span class="nav-icon">📦</span>
+      <span class="nav-label">Procurement</span>
+    </a>
+    <a href="jobs.html" class="nav-item">
+      <span class="nav-icon">💼</span>
+      <span class="nav-label">Jobs</span>
+    </a>
+  </nav>
+
+  <script src="script.js"></script>
+  <script type="module">
+    import { createProcurementRequest, getLocalProfile, requireRole } from './auth.js';
+
+    await requireRole('Buyer');
+    const procurementForm = document.getElementById('procurementForm');
+    const procurementStatus = document.getElementById('procurementStatus');
+    const user = getLocalProfile();
+
+    procurementForm?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      if (!user) {
+        procurementStatus.textContent = 'Please sign in to submit procurement requests.';
+        return;
+      }
+
+      const title = document.getElementById('procurementTitle')?.value.trim();
+      const description = document.getElementById('procurementDescription')?.value.trim();
+      const category = document.getElementById('procurementCategory')?.value;
+
+      if (!title || !description || !category) {
+        procurementStatus.textContent = 'Please complete all procurement fields.';
+        return;
+      }
+
+      try {
+        await createProcurementRequest({
+          title,
+          description,
+          category,
+          requestedBy: user.name || user.email,
+          requestedByEmail: user.email,
+          userId: user.uid
+        });
+
+        procurementStatus.textContent = 'Procurement request submitted successfully.';
+        procurementForm.reset();
+      } catch (error) {
+        console.error(error);
+        procurementStatus.textContent = 'Unable to submit request. Please try again later.';
+      }
+    });
+  </script>
+</body>
+</html>

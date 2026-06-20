@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | MUSIKA HUB</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="admin">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">MUSIKA HUB</a>
+        <div class="section-header">
+          <div>
+            <h2>Pending approvals</h2>
+            <p class="section-description">Review new supplier listings, procurement requests, quotation requests, and job posts before approving them live.</p>
+          </div>
+        </div>
+        <div id="approvalPanels" class="approval-panels"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 MUSIKA HUB. Admin analytics are derived from local activity and event data.</p>
+  </footer>
+
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="trends.html" class="nav-item">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">Trends</span>
+    </a>
+    <a href="categories.html" class="nav-item">
+      <span class="nav-icon">🗂️</span>
+      <span class="nav-label">Categories</span>
+    </a>
+    <a href="services.html" class="nav-item">
+      <span class="nav-icon">🛠️</span>
+      <span class="nav-label">Services</span>
+    </a>
+    <a href="procurement.html" class="nav-item">
+      <span class="nav-icon">📦</span>
+      <span class="nav-label">Procurement</span>
+    </a>
+    <a href="jobs.html" class="nav-item">
+      <span class="nav-icon">💼</span>
+      <span class="nav-label">Jobs</span>
+    </a>
+  </nav>
+
+  <script src="script.js"></script>
+  <script type="module">
+    import { requireRole, getPendingApprovals, approveDocument, getLocalProfile } from './auth.js';
+
+    await requireRole('Admin');
+
+    const approvalPanels = document.getElementById('approvalPanels');
+    const user = getLocalProfile();
+
+    function renderApprovalCards(pendingLists) {
+      if (!approvalPanels) return;
+
+      approvalPanels.innerHTML = Object.entries(pendingLists).map(([collectionName, docs]) => {
+        if (!docs.length) {
+          return `
+            <section class="section-block">
+              <div class="section-header">
+                <h3>${collectionName}</h3>
+                <p class="section-description">No pending items in ${collectionName}.</p>
+              </div>
+            </section>
+          `;
+        }
+
+        return `
+          <section class="section-block">
+            <div class="section-header">
+              <h3>${collectionName}</h3>
+              <p class="section-description">Pending approvals for ${collectionName}.</p>
+            </div>
+            <div class="buyer-grid">
+              ${docs.map((item) => `
+                <article class="buyer-card account-column-card">
+                  <span class="buyer-icon">📄</span>
+                  <strong>${item.title || item.name || item.companyName || item.item || item.jobTitle || 'Request'}</strong>
+                  <p>${item.description || item.category || item.type || item.notes || item.tags || ''}</p>
+                  <p class="section-description">Submitted by ${item.requestedBy || item.supplierName || item.postedBy || item.requestedByEmail || 'Unknown'}</p>
+                  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+                    <button class="btn-primary" type="button" data-id="${item.id}" data-collection="${collectionName}" data-action="approve">Approve</button>
+                    <button class="btn-secondary" type="button" data-id="${item.id}" data-collection="${collectionName}" data-action="reject">Reject</button>
+                  </div>
+                </article>
+              `).join('')}
+            </div>
+          </section>
+        `;
+      }).join('');
+    }
+
+    async function loadApprovals() {
+      try {
+        const pending = await getPendingApprovals();
+        renderApprovalCards(pending);
+      } catch (error) {
+        console.error(error);
+        if (approvalPanels) approvalPanels.innerHTML = '<p class="section-description">Unable to load pending approvals. Refresh to try again.</p>';
+      }
+    }
+
+    approvalPanels?.addEventListener('click', async (event) => {
+      const target = event.target.closest('button[data-id]');
+      if (!target) return;
+      const action = target.getAttribute('data-action');
+      const docId = target.getAttribute('data-id');
+      const collectionName = target.getAttribute('data-collection');
+      const approved = action === 'approve';
+
+      if (!docId || !collectionName) return;
+
+      try {
+        await approveDocument(collectionName, docId, approved, user?.uid);
+        await loadApprovals();
+      } catch (error) {
+        console.error(error);
+        alert('Approval action failed. Please try again.');
+      }
+    });
+
+    loadApprovals();
+  </script>
+</body>
+</html>

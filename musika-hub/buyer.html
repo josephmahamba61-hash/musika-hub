@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buyer Dashboard | MUSIKA HUB</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdn.boxicons.com/3.0.8/fonts/basic/boxicons.min.css" rel="stylesheet" />
+  <link href="https://cdn.boxicons.com/3.0.8/fonts/filled/boxicons-filled.min.css" rel="stylesheet" />
+  <link href="https://cdn.boxicons.com/3.0.8/fonts/brands/boxicons-brands.min.css" rel="stylesheet" />
+</head>
+<body data-page="buyer">
+  <header class="header-sticky">
+    <div class="header-container">
+      <div class="header-left">
+        <a class="logo" href="index.html">
+          <span class="logo-text">MUSIKA HUB</span>
+          <span class="logo-tagline">Buyer dashboard</span>
+        </a>
+      </div>
+      <div class="header-center">
+        <label class="search-wrapper" for="headerSearch">
+          <input id="headerSearch" class="search-input" type="search" placeholder="Search trends, products, cart and payment" />
+          <button class="search-btn" type="button">Search</button>
+        </label>
+      </div>
+      <div class="header-right">
+        <button class="language-selector" type="button">EN</button>
+        <button id="logoutButton" class="btn-text" type="button">Logout</button>
+        <a class="btn-primary" href="signin.html">Sign in</a>
+        <a class="btn-primary" href="account.html">account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <section class="buyer-hero">
+      <p class="eyebrow">Buyer journey</p>
+      <h1>Explore trends, browse products, review the cart, and complete payment in one place.</h1>
+      <p class="section-description">Use these four categories to move quickly from discovery to checkout.</p>
+    </section>
+
+    <section class="buyer-grid">
+      <a class="buyer-card" href="trends.html">
+        <span class="buyer-icon">📈</span>
+        <strong>Trends</strong>
+        <p>See what buyers are searching for and which products are gaining momentum.</p>
+      </a>
+
+      <a class="buyer-card" href="index.html#products">
+        <span class="buyer-icon">🛍️</span>
+        <strong>Products</strong>
+        <p>Browse the catalog, compare options, and pick the right industrial items.</p>
+      </a>
+
+      
+      <a class="buyer-card" href="quotation.html">
+        <span class="buyer-icon">🛒</span>
+        <strong>Quotation</strong>
+        <p>Request a quote for machinery, services, or procurement needs.</p>
+      </a>
+      <article class="buyer-card">
+        <span class="buyer-icon"></span>
+        <strong>Procurement</strong>
+        <p>get help with your procurement needs .</p>
+      </article>
+      
+      <a class="buyer-card" href="index.html#services">
+        <span class="buyer-icon">🛍️</span>
+        <strong>Services</strong>
+        <p>Explore available services and solutions for your needs.</p>
+      </a>
+
+      <a class="buyer-card" href="cart.html">
+        <span class="buyer-icon">🛒</span>
+        <strong>Cart</strong>
+        <p>Review selections, update quantities, and prepare your order summary.</p>
+      </a>
+
+      <a class="buyer-card" href="payment.html">
+        <span class="buyer-icon">💳</span>
+        <strong>Payment</strong>
+        <p>Complete checkout with secure payment options and delivery details.</p>
+      </a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h5>Buyer flow</h5>
+        <p>Start with trends, move into products, confirm your cart, and finish with payment.</p>
+      </div>
+      <div class="footer-section">
+        <h5>Quick links</h5>
+        <ul>
+          <li><a href="trends.html">Trends</a></li>
+          <li><a href="index.html#products">Products</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="payment.html">Payment</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="section-description">&copy; 2026 MUSIKA HUB. Buyer dashboard.</p>
+  </footer>
+  <script type="module">
+    import { requireRole, signOutUser } from './auth.js';
+
+    await requireRole('Buyer');
+
+    document.getElementById('logoutButton')?.addEventListener('click', async () => {
+      await signOutUser();
+      window.location.href = 'signin.html';
+    });
+  </script>
+</body>
+</html>

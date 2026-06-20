@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <a href="/" id="navbar_logo">
+    <i class="fas fa-gem "></i>
+   <title>MUSIKA HUB | Industrial B2B Marketplace</title>
+   </a>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="home">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">MUSIKA HUB</a>
+  
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <input id="headerSearch" class="search-input" type="search" placeholder="Search products, categories or suppliers" />
+          <button class="search-btn" onclick="handleSearch()">🔍</button>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button"><span class="theme-icon">☀️</span></button>
+        <button id="authButton" class="btn-text sign-in-btn" type="button" onclick="window.location.href='signin.html'">Sign In</button>
+      </div>
+    </div>
+  </header>
+  
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1 class="hero-headline">Industrial Solutions for Zimbabwean Growth</h1>
+        <p> SEE WHAT MAKES US DIFFERENT.</p>
+        <div class="hero-features">
+          <span>✓ Quality Products</span>
+          <span>✓ Reliable Services</span>
+          <span>✓ Innovative Technology</span>
+        </div>
+        <p class="hero-subtext">
+          Connect with 1000+ verified suppliers, browse 5000+ products, and access 200+ engineering services.
+        </p>
+        <div class="hero-ctas">
+          <a href="#products" class="btn-primary btn-lg">Shop Products</a>
+          <a href="#services" class="btn-secondary btn-lg">Explore Services</a>
+        </div>
+
+        <!-- Trust Statistics -->
+        <div class="trust-stats">
+          <div class="stat">
+            <span class="stat-number" data-count="1000">0</span>
+            <span class="stat-label">Suppliers</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-count="5000">0</span>
+            <span class="stat-label">Products</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number" data-count="200">0</span>
+            <span class="stat-label">Services</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">24/7 Support</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual -->
+      <div class="hero-visual" aria-label="Featured marketplace visual">
+        <article class="hero-visual-card hero-visual-card--full">
+          <p>Trusted by buyers and suppliers across Zimbabwe.</p>
+        </article>
+      </div>
+    </div>
+
+    <!-- Advertisement Panel -->
+    <div class="ad-panel">
+      <h3>Grow Your Business Faster</h3>
+      <ul class="ad-list">
+        <li><a href="#advertise-supplier">Become a Featured Supplier</a></li>
+        <li><a href="#advertise-products">Advertise Products</a></li>
+        <li><a href="#advertise-services">Promote Services</a></li>
+      </ul>
+      <div class="ad-badge">Premium Partner Program</div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS SECTION -->
+  <section id="products" class="section-products">
+    <div class="section-header">
+      <div>
+        <h2>Products</h2>
+        <p class="section-description">Products display only when stored in localStorage.</p>
+      </div>
+    </div>
+    <div id="productArea" class="products-grid"></div>
+    <div id="emptyProducts" class="empty-state">No products available yet</div>
+  </section>
+
+  <section class="section-block">
+    <div class="section-header">
+      <div>
+        <h2>Add a Product</h2>
+        <p class="section-description">Add product entries to build real recommendation data.</p>
+      </div>
+    </div>
+    <div class="form-card">
+      <form id="productForm" class="product-form" onsubmit="return handleAddProduct(event)">
+        <label class="form-label">
+          Product name
+          <input id="productName" type="text" placeholder="Hydraulic Pump" required />
+        </label>
+        <label class="form-label">
+          Category
+          <select id="productCategory" required>
+            <option value="Machinery">Machinery</option>
+            <option value="Electricals">Electricals</option>
+            <option value="Construction">Construction</option>
+            <option value="Tools & Hardware">Tools & Hardware</option>
+            <option value="Safety & PPE">Safety & PPE</option>
+            <option value="Lubricants">Lubricants</option>
+            <option value="Materials">Materials</option>
+          </select>
+        </label>
+        <button class="btn-primary" type="submit">Add Product</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- SERVICES SECTION -->
+  <section id="services" class="section-services alt-bg">
+    <div class="section-header">
+      <h2>Featured Services</h2>
+      <a href="#all-services" class="link-view-all">View All Services →</a>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🔧</div>
+        <h4>Engineering Consultancy</h4>
+        <p>Expert technical guidance for project planning and optimization.</p>
+        <a href="#book-service" class="btn-text">Book Consultation</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🏭</div>
+        <h4>Equipment Installation</h4>
+        <p>Professional on-site installation and commissioning services.</p>
+        <a href="#book-service" class="btn-text">Book Installation</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🔩</div>
+        <h4>Maintenance & Repairs</h4>
+        <p>Preventive and corrective maintenance for industrial equipment.</p>
+        <a href="#book-service" class="btn-text">Schedule Service</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">⚙️</div>
+        <h4>Fabrication Services</h4>
+        <p>Custom metal fabrication and precision manufacturing.</p>
+        <a href="#book-service" class="btn-text">Request Quote</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📚</div>
+        <h4>Training & Workshops</h4>
+        <p>Hands-on technical training for equipment operation.</p>
+        <a href="#book-service" class="btn-text">Enroll Now</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h4>Automation Solutions</h4>
+        <p>System integration and process automation consulting.</p>
+        <a href="#book-service" class="btn-text">Explore Options</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORY BROWSER -->
+  <section class="section-categories">
+    <div class="section-header">
+      <h2>Browse Categories</h2>
+    </div>
+
+    <div class="categories-grid">
+      <a href="#category/electrical" class="category-card">
+        <div class="category-icon">⚡</div>
+        <h5>Electrical & Electronics</h5>
+      </a>
+
+      <a href="#category/mechanical" class="category-card">
+        <div class="category-icon">🔩</div>
+        <h5>Mechanical Parts</h5>
+      </a>
+
+      <a href="#category/tools" class="category-card">
+        <div class="category-icon">🔨</div>
+        <h5>Tools & Hardware</h5>
+      </a>
+
+      <a href="#category/construction" class="category-card">
+        <div class="category-icon">🏗️</div>
+        <h5>Construction Materials</h5>
+      </a>
+
+      <a href="#category/machinery" class="category-card">
+        <div class="category-icon">🏭</div>
+        <h5>Industrial Machinery</h5>
+      </a>
+
+      <a href="#category/safety" class="category-card">
+        <div class="category-icon">🛡️</div>
+        <h5>Safety & PPE</h5>
+      </a>
+
+      <a href="#category/automation" class="category-card">
+        <div class="category-icon">🤖</div>
+        <h5>Automation & Control</h5>
+      </a>
+
+      <a href="#category/fluids" class="category-card">
+        <div class="category-icon">💧</div>
+        <h5>Lubricants & Fluids</h5>
+      </a>
+    </div>
+  </section>
+
+  <!-- PROCUREMENT SECTION -->
+  <section class="section-procurement">
+    <div class="procurement-banner">
+      <h2>Procure Smarter. Build Stronger.</h2>
+      <p>Post your procurement needs and connect with verified suppliers instantly.</p>
+      <div class="procurement-ctas">
+        <button class="btn-primary btn-lg" onclick="goToRoute('#post-procurement')">Post Procurement</button>
+        <button class="btn-secondary btn-lg" onclick="goToRoute('#request-quotation')">Request Quotations</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI ASSISTANT MAYA WIDGET -->
+  <div class="ai-widget" id="mayaWidget">
+    <button class="maya-toggle" id="mayaToggle" onclick="toggleMaya()">
+      <span class="maya-icon">🤖</span>
+      <span class="maya-label">MAYA</span>
+    </button>
+
+    <div class="maya-panel" id="mayaPanel">
+      <div class="maya-header">
+        <h4>MAYA Assistant</h4>
+        <button onclick="closeMaya()">×</button>
+      </div>
+      <div class="maya-content">
+        <p>How can I help you today?</p>
+        <div class="maya-options">
+          <button onclick="mayaOption('find-products')">🔍 Find Products</button>
+          <button onclick="mayaOption('find-suppliers')">🏢 Find Suppliers</button>
+          <button onclick="mayaOption('request-quote')">📋 Request Quotations</button>
+          <button onclick="mayaOption('track-order')">📦 Track Orders</button>
+          <button onclick="mayaOption('procurement')">📊 Procurement Help</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="trends.html" class="nav-item">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">Trends</span>
+    </a>
+    <a href="categories.html" class="nav-item">
+      <span class="nav-icon">🗂️</span>
+      <span class="nav-label">Categories</span>
+    </a>
+    <a href="services.html" class="nav-item">
+      <span class="nav-icon">🛠️</span>
+      <span class="nav-label">Services</span>
+    </a>
+    <a href="procurement.html" class="nav-item">
+      <span class="nav-icon">📦</span>
+      <span class="nav-label">Procurement</span>
+    </a>
+    <a href="jobs.html" class="nav-item">
+      <span class="nav-icon">💼</span>
+      <span class="nav-label">Jobs</span>
+    </a>
+  </nav>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h5>About MUSIKA HUB</h5>
+        <p>Your trusted industrial B2B marketplace connecting suppliers, service providers, and businesses.</p>
+      </div>
+
+      <div class="footer-section">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#products">Products</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#suppliers">Suppliers</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="#help">Help Center</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#shipping">Shipping Info</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#privacy">Privacy Policy</a></li>
+          <li><a href="#terms">Terms of Service</a></li>
+          <li><a href="#security">Security</a></li>
+          <li><a href="#compliance">Compliance</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 MUSIKA HUB. All rights reserved. Powered by Quotinet (Pvt) Ltd.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

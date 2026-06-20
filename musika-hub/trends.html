@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trends | MUSIKA HUB</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="trends">
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand">MUSIKA HUB</a>
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <input id="headerSearch" class="search-input" type="search" placeholder="Search products, categories or suppliers" />
+          <button class="search-btn" onclick="handleSearch()">🔍</button>
+        </div>
+        <button id="themeToggle" class="theme-toggle" type="button"><span class="theme-icon">☀️</span></button>
+        <button id="authButton" class="btn-text sign-in-btn" type="button" onclick="window.location.href='signin.html'">Sign In</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content trends-page">
+    <section class="section-block trends-top">
+      <div>
+        <p class="eyebrow">Recommendation engine</p>
+        <h1>Real-time trends from actual activity</h1>
+        <p class="section-description">Trends are generated from product views, searches, and additions stored in localStorage.</p>
+      </div>
+    </section>
+
+    <section class="trend-toolbar">
+      <div class="trend-modes" id="trendModes"></div>
+      <div class="category-filters" id="trendCategories"></div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <h2>Trending Products</h2>
+          <p class="section-description">Recommendations update based on your behavior.</p>
+        </div>
+      </div>
+      <div id="trendProducts" class="products-grid"></div>
+      <div id="emptyTrends" class="empty-state">No trending data yet</div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-header">
+        <div>
+          <h2>Trending Categories</h2>
+          <p class="section-description">Categories ranked by interaction score.</p>
+        </div>
+      </div>
+      <div id="trendCategorySummary" class="categories-grid"></div>
+    </section>
+
+    <section class="cta-grid">
+      <div class="callout-card">
+        <h3>Can't find it? Put a procurement request.</h3>
+        <p>Share your sourcing need and let us find it for you.</p>
+        <a href="procurement.html" class="btn-primary">Procurement</a>
+      </div>
+      <div class="callout-card newsletter-card">
+        <h3>Get trend alerts straight to your inbox</h3>
+        <p>Subscribe for notifications about products and categories you care about.</p>
+        <div class="newsletter-form">
+          <input id="newsletterEmail" type="email" placeholder="Enter your email" />
+          <button class="btn-secondary" onclick="handleSubscribe()">Subscribe</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 MUSIKA HUB. Trends driven by localStorage only.</p>
+  </footer>
+
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Home</span>
+    </a>
+    <a href="trends.html" class="nav-item">
+      <span class="nav-icon">📈</span>
+      <span class="nav-label">Trends</span>
+    </a>
+    <a href="categories.html" class="nav-item">
+      <span class="nav-icon">🗂️</span>
+      <span class="nav-label">Categories</span>
+    </a>
+    <a href="services.html" class="nav-item">
+      <span class="nav-icon">🛠️</span>
+      <span class="nav-label">Services</span>
+    </a>
+    <a href="procurement.html" class="nav-item">
+      <span class="nav-icon">📦</span>
+      <span class="nav-label">Procurement</span>
+    </a>
+    <a href="jobs.html" class="nav-item">
+      <span class="nav-icon">💼</span>
+      <span class="nav-label">Jobs</span>
+    </a>
+  </nav>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTrendsPage();
+    });
+  </script>
+</body>
+</html>

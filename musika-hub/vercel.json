@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "env": {
+    "NEXT_PUBLIC_API_URL": {
+      "description": "Backend API URL for production",
+      "example": "https://musikahub-api.railway.app"
+    },
+    "NEXT_PUBLIC_SITE_URL": {
+      "description": "Frontend URL for production",
+      "example": "https://musika-hub.vercel.app"
+    }
+  },
+  "regions": ["iad1"],
+  "framework": "nextjs",
+  "outputDirectory": ".next"
+}

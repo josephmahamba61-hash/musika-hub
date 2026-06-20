@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quotation Request | MUSIKA HUB</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="buyer">
+  <header class="header-sticky">
+    <div class="header-container">
+      <div class="header-left">
+        <a class="logo" href="index.html">
+          <span class="logo-text">MUSIKA HUB</span>
+          <span class="logo-tagline">Quotation page</span>
+        </a>
+      </div>
+      <div class="header-center">
+        <label class="search-wrapper" for="headerSearch">
+          <input id="headerSearch" class="search-input" type="search" placeholder="Search quotations, companies, and items" />
+          <button class="search-btn" type="button">Search</button>
+        </label>
+      </div>
+      <div class="header-right">
+        <button id="logoutButton" class="btn-text" type="button">Logout</button>
+        <a class="btn-primary" href="buyer.html">Back to buyer</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <section class="buyer-hero">
+      <p class="eyebrow">Quotation flow</p>
+      <h1>Request a quote by adding items, entering your company details, and submitting the request.</h1>
+      <p class="section-description">Use this page to capture the quantity, company, and item list you want suppliers to quote on.</p>
+    </section>
+
+    <section class="buyer-grid">
+      <article class="buyer-card account-column-card">
+        <span class="buyer-icon">📋</span>
+        <strong>Get a quote</strong>
+        <p>Fill in the company, quantity, and item details below to start your quotation request.</p>
+      </article>
+
+      <article class="buyer-card account-column-card">
+        <form id="quotationRequestForm" class="account-column-layout" style="gap: 12px;">
+          <label class="auth-field">
+            <span>Company</span>
+            <input id="companyName" type="text" placeholder="e.g. Musika Industries" required />
+          </label>
+
+          <label class="auth-field">
+            <span>Item</span>
+            <input id="itemName" type="text" placeholder="e.g. Hydraulic pump" required />
+          </label>
+
+          <label class="auth-field">
+            <span>Quantity</span>
+            <input id="quantityValue" type="number" min="1" placeholder="e.g. 5" required />
+          </label>
+
+          <label class="auth-field">
+            <span>Notes</span>
+            <textarea id="quoteNotes" rows="4" placeholder="Include delivery dates, specs, or special requirements" style="width: 100%; border-radius: 12px; border: 1px solid rgba(192, 192, 192, 0.2); background: rgba(10, 25, 49, 0.8); color: #fff; padding: 12px 14px;"></textarea>
+          </label>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn-primary" type="button" id="addItemBtn">Add item</button>
+            <button class="btn-primary" type="submit">Submit quote</button>
+          </div>
+
+          <p id="quoteStatus" class="section-description">Add one or more items, then submit the quotation request.</p>
+        </form>
+      </article>
+
+      <article class="buyer-card account-column-card">
+        <span class="buyer-icon">🧾</span>
+        <strong>Items to quote</strong>
+        <ul id="quoteItemsList" style="margin-left: 18px; color: #edf3ff; line-height: 1.7;"></ul>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h5>Quotation flow</h5>
+        <p>Use this form to request item and quantity-based quotes from suppliers.</p>
+      </div>
+      <div class="footer-section">
+        <h5>Quick links</h5>
+        <ul>
+          <li><a href="buyer.html">Buyer dashboard</a></li>
+          <li><a href="supplier.html">Supplier dashboard</a></li>
+          <li><a href="cart.html">Cart</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { createQuotationRequest, getLocalProfile, requireRole, signOutUser } from './auth.js';
+
+    await requireRole('Buyer');
+    const user = getLocalProfile();
+    const logoutBtn = document.getElementById('logoutButton');
+    const form = document.getElementById('quotationRequestForm');
+    const addItemBtn = document.getElementById('addItemBtn');
+    const quoteItemsList = document.getElementById('quoteItemsList');
+    const quoteStatus = document.getElementById('quoteStatus');
+    const quoteItems = [];
+
+    function renderItems() {
+      if (!quoteItems.length) {
+        quoteItemsList.innerHTML = '<li>No items added yet.</li>';
+        return;
+      }
+
+      quoteItemsList.innerHTML = quoteItems.map((item) => `<li>${item.item} — Quantity: ${item.quantity}</li>`).join('');
+    }
+
+    addItemBtn?.addEventListener('click', () => {
+      const item = document.getElementById('itemName').value.trim();
+      const quantity = document.getElementById('quantityValue').value.trim();
+
+      if (!item || !quantity) {
+        quoteStatus.textContent = 'Please enter both an item and quantity before adding it.';
+        return;
+      }
+
+      quoteItems.push({ item, quantity });
+      renderItems();
+      quoteStatus.textContent = 'Item added. You can add more items or submit the request.';
+      document.getElementById('itemName').value = '';
+      document.getElementById('quantityValue').value = '';
+    });
+
+    form?.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      quoteStatus.textContent = '';
+
+      if (!user) {
+        quoteStatus.textContent = 'Please sign in to submit quotation requests.';
+        return;
+      }
+
+      const company = document.getElementById('companyName').value.trim();
+      const notes = document.getElementById('quoteNotes').value.trim();
+
+      if (!company) {
+        quoteStatus.textContent = 'Please enter your company name.';
+        return;
+      }
+
+      if (!quoteItems.length) {
+        quoteStatus.textContent = 'Please add at least one item before submitting.';
+        return;
+      }
+
+      try {
+        await createQuotationRequest({
+          companyName: company,
+          items: quoteItems,
+          notes,
+          requestedBy: user.name || user.email,
+          requestedByEmail: user.email,
+          userId: user.uid
+        });
+
+        quoteStatus.textContent = `Quotation request submitted for ${company}.`;
+        form.reset();
+        quoteItems.length = 0;
+        renderItems();
+      } catch (error) {
+        console.error(error);
+        quoteStatus.textContent = 'Unable to submit the quotation request. Please try again.';
+      }
+    });
+
+    logoutBtn?.addEventListener('click', async () => {
+      await signOutUser();
+      window.location.href = 'signin.html';
+    });
+
+    renderItems();
+  </script>
+</body>
+</html>

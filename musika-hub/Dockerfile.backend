@@ -1,0 +1,32 @@
+# Backend Dockerfile for Railway/Render deployment
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy root package files for workspace setup
+COPY package.json package-lock.json ./
+COPY backend/package.json ./backend/
+COPY backend/tsconfig.json ./backend/
+
+# Install dependencies
+RUN npm install
+
+# Copy backend source
+COPY backend/src ./backend/src
+
+# Build backend
+RUN npm --workspace backend run build
+
+# Set environment
+ENV NODE_ENV=production
+ENV PORT=4000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:4000/api/health', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+# Expose port
+EXPOSE 4000
+
+# Start backend
+CMD ["npm", "--workspace", "backend", "run", "start"]

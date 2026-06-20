@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supplier Dashboard | MUSIKA HUB</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-page="supplier">
+  <header class="header-sticky">
+    <div class="header-container">
+      <div class="header-left">
+        <a class="logo" href="index.html">
+          <span class="logo-text">MUSIKA HUB</span>
+          <span class="logo-tagline">Supplier dashboard</span>
+        </a>
+      </div>
+      <div class="header-center">
+        <label class="search-wrapper" for="headerSearch">
+          <input id="headerSearch" class="search-input" type="search" placeholder="Search trends, products, cart and payment" />
+          <button class="search-btn" type="button">Search</button>
+        </label>
+      </div>
+      <div class="header-right">
+        <button class="language-selector" type="button">EN</button>
+        <button id="logoutButton" class="btn-text" type="button">Logout</button>
+        <a class="btn-primary" href="signin.html">Sign in</a>
+        <a class="btn-primary" href="account.html">account</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-content">
+    <section class="supplier-hero">
+      <p class="eyebrow">Supplier journey</p>
+      <h1>Manage your listings, track orders, and connect with buyers in one place.</h1>
+      <p class="section-description">Choose the category that best fits your business before you continue.</p>
+
+      <label class="auth-field" style="max-width: 420px; margin-top: 16px;">
+        <span>I am a</span>
+        <select id="supplierTypeSelect" class="search-input" style="width: 100%; border: 1px solid rgba(192, 192, 192, 0.2); border-radius: 12px; padding: 12px 14px; background: rgba(10, 25, 49, 0.8); color: #fff;">
+          <option value="Service Provider">Service Provider</option>
+          <option value="Product Supplier">Product Supplier</option>
+          <option value="Procurement Platform">Procurement Platform</option>
+        </select>
+      </label>
+      <p id="supplierTypeMessage" class="section-description">Your selected business type will be saved to your account.</p>
+    </section>
+
+    <section class="trend-toolbar" aria-label="Supplier tabs">
+      <div class="trend-modes">
+        <button class="mode-button active" type="button" data-panel="overviewPanel">Overview</button>
+        <button class="mode-button" type="button" data-panel="listingsPanel">Listings</button>
+        <button class="mode-button" type="button" data-panel="ordersPanel">Orders</button>
+        <button class="mode-button" type="button" data-panel="analyticsPanel">Analytics</button>
+        <button class="mode-button" type="button" data-panel="addPanel">Add</button>
+        <button class="mode-button" type="button" data-panel="quotationPanel">Quotation</button>
+      </div>
+      <div class="category-filters">
+        <button class="category-button active" type="button">Products</button>
+        <button class="category-button" type="button">News</button>
+        <button class="category-button" type="button">Procurement</button>
+      </div>
+    </section>
+
+    <section id="overviewPanel" class="section-block">
+      <div class="section-header">
+        <div>
+          <h2>Overview</h2>
+          <p class="section-description">Products and latest news for your supplier dashboard.</p>
+        </div>
+      </div>
+      <div class="buyer-grid">
+        <article class="buyer-card account-column-card">
+          <span class="buyer-icon">🛍️</span>
+          <strong>Featured Products</strong>
+          <p>Show all available products and highlight the ones most useful for buyers.</p>
+        </article>
+        <article class="buyer-card account-column-card">
+          <span class="buyer-icon">📰</span>
+          <strong>Latest News</strong>
+          <p>Share market updates, supplier announcements, and buyer-friendly insights.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="listingsPanel" class="section-block">
+      <div class="section-header">
+        <div>
+          <h2>Listings</h2>
+          <p class="section-description">Display all products and services based on buyer usability, usefulness, and demand.</p>
+        </div>
+        <button class="btn-primary" type="button" onclick="showPanel('addPanel'); return false;">Add product or service offered</button>
+      </div>
+      <div class="buyer-grid" id="listingCards"></div>
+      <p class="section-description" id="listingStatus">Your latest supplier listings will appear here once you add new offerings.</p>
+    </section>
+
+    <section id="ordersPanel" class="section-block" hidden>
+      <div class="section-header">
+        <div>
+          <h2>Orders</h2>
+          <p class="section-description">Track open orders, delivery progress, and buyer requests.</p>
+        </div>
+      </div>
+      <div class="buyer-grid">
+        <article class="buyer-card account-column-card">
+          <span class="buyer-icon">📋</span>
+          <strong>Open Orders</strong>
+          <p>Review pending purchases, fulfillment status, and buyer follow-up.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="analyticsPanel" class="section-block" hidden>
+      <div class="section-header">
+        <div>
+          <h2>Analytics</h2>
+          <p class="section-description">Measure buyer activity, demand trends, and listing performance.</p>
+        </div>
+      </div>
+      <div class="buyer-grid">
+        <article class="buyer-card account-column-card">
+          <span class="buyer-icon">📊</span>
+          <strong>Performance</strong>
+          <p>Use demand signals and engagement history to improve your supplier strategy.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="addPanel" class="section-block" hidden>
+      <div class="section-header">
+        <div>
+          <h2>Add product or service</h2>
+          <p class="section-description">Create a quick listing for a product or service your buyers can discover.</p>
+        </div>
+      </div>
+      <div class="buyer-grid">
+        <article class="buyer-card account-column-card">
+          <span class="buyer-icon">➕</span>
+          <strong>New listing form</strong>
+          <p>Capture product name, category, pricing, and service details for new offerings.</p>
+        </article>
+        <article class="buyer-card account-column-card">
+          <form id="supplierAddForm" class="account-column-layout" style="gap: 12px;">
+            <label class="auth-field">
+              <span>Listing name</span>
+              <input type="text" id="listingName" placeholder="e.g. Bulk Coffee Beans" required />
+            </label>
+            <label class="auth-field">
+              <span>Type</span>
+              <select id="listingType">
+                <option value="Product">Product</option>
+                <option value="Service">Service</option>
+              </select>
+            </label>
+            <label class="auth-field">
+              <span>Category</span>
+              <input type="text" id="listingCategory" placeholder="e.g. Food & Beverage" required />
+            </label>
+            <label class="auth-field">
+              <span>Price</span>
+              <input type="text" id="listingPrice" placeholder="e.g. 1200 per unit" required />
+            </label>
+            <label class="auth-field">
+              <span>Description</span>
+              <textarea id="listingDescription" rows="4" placeholder="Highlight value, delivery, or buyer benefits" required style="width: 100%; border-radius: 12px; border: 1px solid rgba(192, 192, 192, 0.2); background: rgba(10, 25, 49, 0.8); color: #fff; padding: 12px 14px;"></textarea>
+            </label>
+            <button class="btn-primary" type="submit">Save listing</button>
+            <p id="listingFormMessage" class="section-description">Save a listing to update your supplier dashboard instantly.</p>
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section id="quotationPanel" class="section-block" hidden>
+      <div class="section-header">
+        <div>
+          <h2>Get a quotation</h2>
+          <p class="section-description">Request a quote for machinery, services, or procurement needs directly from this panel.</p>
+        </div>
+      </div>
+      <div class="buyer-grid">
+        <article class="buyer-card account-column-card">
+          <span class="buyer-icon">💬</span>
+          <strong>Quotation request</strong>
+          <p>Capture the machinery, quantity, and delivery details buyers need to quote accurately.</p>
+        </article>
+        <article class="buyer-card account-column-card">
+          <form id="quotationForm" class="account-column-layout" style="gap: 12px;">
+            <label class="auth-field">
+              <span>Machine or service</span>
+              <input type="text" id="quotationItem" placeholder="e.g. Hydraulic press" required />
+            </label>
+            <label class="auth-field">
+              <span>Quantity</span>
+              <input type="text" id="quotationQuantity" placeholder="e.g. 5 units" required />
+            </label>
+            <label class="auth-field">
+              <span>Delivery timeline</span>
+              <input type="text" id="quotationTimeline" placeholder="e.g. 14 working days" required />
+            </label>
+            <label class="auth-field">
+              <span>Additional notes</span>
+              <textarea id="quotationNotes" rows="4" placeholder="Share specifications, budget range, or supplier requirements" required style="width: 100%; border-radius: 12px; border: 1px solid rgba(192, 192, 192, 0.2); background: rgba(10, 25, 49, 0.8); color: #fff; padding: 12px 14px;"></textarea>
+            </label>
+            <button class="btn-primary" type="submit">Send quotation request</button>
+            <p id="quotationFormMessage" class="section-description">Your quotation request will appear in the supplier flow for follow-up.</p>
+          </form>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { requireRole, getLocalProfile, createProductListing, getSupplierProducts, createQuotationRequest, signOutUser } from './auth.js';
+
+    await requireRole('Supplier');
+
+    const supplierTypeSelect = document.getElementById('supplierTypeSelect');
+    const supplierTypeMessage = document.getElementById('supplierTypeMessage');
+    const tabButtons = document.querySelectorAll('.trend-modes .mode-button');
+    const panels = document.querySelectorAll('main .section-block');
+    const listingCards = document.getElementById('listingCards');
+    const listingStatus = document.getElementById('listingStatus');
+    const addForm = document.getElementById('supplierAddForm');
+    const listingFormMessage = document.getElementById('listingFormMessage');
+    const quotationForm = document.getElementById('quotationForm');
+    const quotationFormMessage = document.getElementById('quotationFormMessage');
+    const listingType = document.getElementById('listingType');
+    const listingCategory = document.getElementById('listingCategory');
+    const listingName = document.getElementById('listingName');
+    const listingPrice = document.getElementById('listingPrice');
+    const listingDescription = document.getElementById('listingDescription');
+    const savedUser = getLocalProfile();
+
+    function showPanel(targetId) {
+      panels.forEach((panel) => {
+        panel.hidden = panel.id !== targetId;
+      });
+      tabButtons.forEach((button) => {
+        button.classList.toggle('active', button.dataset.panel === targetId);
+      });
+    }
+
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => showPanel(button.dataset.panel));
+    });
+
+    function renderListings(listings) {
+      if (!listingCards) return;
+      if (!listings.length) {
+        listingCards.innerHTML = '<article class="buyer-card account-column-card"><span class="buyer-icon">📦</span><strong>No listings yet</strong><p>Add a product or service to populate this supplier flow.</p></article>';
+        if (listingStatus) listingStatus.textContent = 'Add your first listing to see it appear here.';
+        return;
+      }
+
+      listingCards.innerHTML = listings.map((listing) => `
+        <article class="buyer-card account-column-card">
+          <span class="buyer-icon">${listing.type === 'Service' ? '🛠️' : '📦'}</span>
+          <strong>${listing.name}</strong>
+          <p>${listing.category} • ${listing.price}</p>
+          <p>${listing.description}</p>
+          <p class="section-description">Status: ${listing.status || 'pending'}</p>
+        </article>
+      `).join('');
+
+      if (listingStatus) listingStatus.textContent = 'Your supplier listings are ready for buyers to review.';
+    }
+
+    async function loadSupplierProducts() {
+      if (!savedUser) {
+        if (listingStatus) listingStatus.textContent = 'Please sign in as a supplier to view listings.';
+        return;
+      }
+
+      try {
+        const listings = await getSupplierProducts(savedUser.uid);
+        renderListings(listings);
+      } catch (error) {
+        console.error(error);
+        if (listingFormMessage) listingFormMessage.textContent = 'Unable to load your listings. Please refresh the page.';
+      }
+    }
+
+    quotationForm?.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      if (!savedUser) {
+        if (quotationFormMessage) quotationFormMessage.textContent = 'You must sign in as a supplier to submit quotation requests.';
+        return;
+      }
+
+      const request = {
+        companyName: savedUser.name || '',
+        items: [
+          {
+            item: document.getElementById('quotationItem').value.trim(),
+            quantity: document.getElementById('quotationQuantity').value.trim(),
+            timeline: document.getElementById('quotationTimeline').value.trim()
+          }
+        ],
+        notes: document.getElementById('quotationNotes').value.trim(),
+        requestedBy: savedUser.name || savedUser.email,
+        requestedByEmail: savedUser.email,
+        userId: savedUser.uid
+      };
+
+      if (!request.items[0].item || !request.items[0].quantity || !request.items[0].timeline) {
+        if (quotationFormMessage) quotationFormMessage.textContent = 'Please complete all quotation details before sending.';
+        return;
+      }
+
+      try {
+        await createQuotationRequest(request);
+        if (quotationFormMessage) quotationFormMessage.textContent = `Quotation request for ${request.items[0].item} has been submitted to Firestore.`;
+        quotationForm?.reset();
+      } catch (error) {
+        console.error(error);
+        if (quotationFormMessage) quotationFormMessage.textContent = 'Unable to submit the quotation request. Please try again later.';
+      }
+    });
+
+    addForm?.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      if (!savedUser) {
+        if (listingFormMessage) listingFormMessage.textContent = 'Please sign in as a supplier to add a listing.';
+        return;
+      }
+
+      const listing = {
+        name: listingName.value.trim(),
+        type: listingType.value,
+        category: listingCategory.value.trim(),
+        price: listingPrice.value.trim(),
+        description: listingDescription.value.trim(),
+        supplierId: savedUser.uid,
+        supplierName: savedUser.name || savedUser.email
+      };
+
+      if (!listing.name || !listing.category || !listing.price || !listing.description) {
+        if (listingFormMessage) listingFormMessage.textContent = 'Please complete all fields before saving your listing.';
+        return;
+      }
+
+      try {
+        await createProductListing(listing);
+        if (listingFormMessage) listingFormMessage.textContent = `Saved ${listing.name} as a ${listing.type.toLowerCase()} listing.`;
+        addForm.reset();
+        await loadSupplierProducts();
+      } catch (error) {
+        console.error(error);
+        if (listingFormMessage) listingFormMessage.textContent = 'Unable to save the listing. Please try again.';
+      }
+    });
+
+    showPanel('overviewPanel');
+    loadSupplierProducts();
+
+    if (savedUser && supplierTypeSelect) {
+      supplierTypeSelect.value = savedUser.accountType || savedUser.role || 'Service Provider';
+    }
+
+    supplierTypeSelect?.addEventListener('change', function () {
+      const selectedType = supplierTypeSelect.value;
+      if (!savedUser) {
+        supplierTypeMessage.textContent = 'Sign in first to save your business type.';
+        return;
+      }
+
+      supplierTypeMessage.textContent = `Saved as ${selectedType}.`;
+      if (selectedType === 'Service Provider' || selectedType === 'Procurement Platform') {
+        showPanel('addPanel');
+      }
+    });
+
+    document.getElementById('logoutButton')?.addEventListener('click', async () => {
+      await signOutUser();
+      window.location.href = 'signin.html';
+    });
+  </script>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h5>Supplier flow</h5>
+        <p>Start with trends, move into products, confirm your cart, and finish with payment.</p>
+      </div>
+      <div class="footer-section">
+        <h5>Quick links</h5>
+        <ul>
+          <li><a href="trends.html">Trends</a></li>
+          <li><a href="index.html#products">Products</a></li>
+          <li><a href="cart.html">Cart</a></li>
+          <li><a href="payment.html">Payment</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="section-description">&copy; 2026 MUSIKA HUB. Buyer dashboard.</p>
+  </footer>
+</body>
+</html>

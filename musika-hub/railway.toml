@@ -1,0 +1,24 @@
+[project]
+id = "musika-hub-backend"
+
+[build]
+builder = "nixpacks"
+nixpacks.pkgs = ["postgresql"]
+
+[[services]]
+name = "api"
+runtime = "node"
+startCommand = "npm --workspace backend run build && npm --workspace backend run start"
+numReplicas = 1
+port = 4000
+
+[[services.variables]]
+name = "NODE_ENV"
+value = "production"
+
+[[services.variables]]
+name = "PORT"
+value = "4000"
+
+[volumes]
+database = "/data"
